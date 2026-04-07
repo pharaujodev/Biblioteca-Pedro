@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model emprestimos {
+  id              Int      @id @default(autoincrement())
+  id_usuario      Int
+  id_livro        Int
+  data_emprestimo DateTime @db.Date
+  data_devolucao  DateTime @db.Date
+  status          String   @default("pendente") @db.VarChar(20)
+  livros          livros   @relation(fields: [id_livro], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuarios        usuarios @relation(fields: [id_usuario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model livros {
+  id                    Int                     @id @default(autoincrement())
+  titulo                String                  @db.VarChar(255)
+  autor                 String                  @db.VarChar(255)
+  ano_publicacao        Int
+  isbn                  String                  @unique @db.VarChar(20)
+  paginas               Int
+  categoria             String                  @db.VarChar(100)
+  disponivel            String                  @default("disponível") @db.VarChar(20)
+  capa                  String?                 @db.VarChar(255)
+  quantidade            Int                     @default(1)
+  emprestimos           emprestimos[]
+  solicitacaoemprestimo solicitacaoemprestimo[]
+}
+
+model solicitacaoemprestimo {
+  id               Int      @id @default(autoincrement())
+  id_usuario       Int
+  id_livro         Int
+  data_solicitacao DateTime @default(now()) @db.Timestamp(6)
+  status           String   @default("pendente") @db.VarChar(20)
+  livros           livros   @relation(fields: [id_livro], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuarios         usuarios @relation(fields: [id_usuario], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model usuarios {
+  id                    Int                     @id @default(autoincrement())
+  nome                  String                  @db.VarChar(255)
+  email                 String                  @unique @db.VarChar(255)
+  senha                 String                  @db.VarChar(255)
+  role                  String                  @default("cliente") @db.VarChar(50)
+  emprestimos           emprestimos[]
+  solicitacaoemprestimo solicitacaoemprestimo[]
+}

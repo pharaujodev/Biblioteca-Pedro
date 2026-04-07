@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: biblioteca-db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: bibliotecaProjeto-api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - ./prisma:/app/prisma
+      - ./frontend:/frontend
+    command: sh -c "npx prisma generate --schema=./prisma/schema.prisma && npm run dev"
+    environment:
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      ACTIVEMQ_URL: ${ACTIVEMQ_URL}
+      ACTIVEMQ_USER: ${ACTIVEMQ_USER}
+      ACTIVEMQ_PASSWORD: ${ACTIVEMQ_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+      activemq:
+        condition: service_started
+    restart: unless-stopped
+
+  activemq:
+    image: rmohr/activemq
+    container_name: biblioteca-activemq
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: ${ACTIVEMQ_USER}
+      ACTIVEMQ_ADMIN_PASSWORD: ${ACTIVEMQ_PASSWORD}
+    restart: unless-stopped
+
+volumes:
+  pgdata:
