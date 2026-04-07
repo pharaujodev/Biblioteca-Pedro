@@ -28,9 +28,8 @@ services:
       - "3000:3000"
     volumes:
       - ./backend:/app
-      - ./prisma:/app/prisma
       - ./frontend:/frontend
-    command: sh -c "npx prisma generate --schema=./prisma/schema.prisma && npm run dev"
+    command: sh -c "npx prisma generate && npm run dev"
     environment:
       PORT: 3000
       DATABASE_URL: ${DATABASE_URL}

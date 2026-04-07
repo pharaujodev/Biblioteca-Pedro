@@ -1,6 +1,23 @@
-const prisma = require ('../config/prisma');
-exports.criarEmprestimo = async (tx, id_usuario, id_livro, data_emprestimo, data_devolucao, status) => {
-    const result = await tx.emprestimos.create({
+const prisma = require('../config/prisma');
+
+exports.criarEmprestimo = async (
+    txOrIdUsuario,
+    maybeIdUsuario,
+    maybeIdLivro,
+    maybeDataEmprestimo,
+    maybeDataDevolucao,
+    maybeStatus
+) => {
+    const usandoTransacao = typeof maybeStatus !== 'undefined';
+
+    const tx = usandoTransacao ? txOrIdUsuario : prisma;
+    const id_usuario = usandoTransacao ? maybeIdUsuario : txOrIdUsuario;
+    const id_livro = usandoTransacao ? maybeIdLivro : maybeIdUsuario;
+    const data_emprestimo = usandoTransacao ? maybeDataEmprestimo : maybeIdLivro;
+    const data_devolucao = usandoTransacao ? maybeDataDevolucao : maybeDataEmprestimo;
+    const status = usandoTransacao ? maybeStatus : maybeDataDevolucao;
+
+    return await tx.emprestimos.create({
         data: {
             id_usuario,
             id_livro,
@@ -9,45 +26,45 @@ exports.criarEmprestimo = async (tx, id_usuario, id_livro, data_emprestimo, data
             status
         }
     });
-    return result;
-}
+};
+
 exports.listarEmprestimo = async (search) => {
-    if(search){
-        const result = await prisma.emprestimos.findMany({
+    if (search && !isNaN(search)) {
+        const numero = Number(search);
+
+        return await prisma.emprestimos.findMany({
             where: {
                 OR: [
-                    { id_usuario : { equals: Number(search) } },
-                    { id_livro : { equals: Number(search) } },
+                    { id_usuario: numero },
+                    { id_livro: numero }
                 ]
-            }
-        });
-        return result;
-    }
-    else{
-        const result = await prisma.emprestimos.findMany({
+            },
             include: {
                 livros: {
-                    select: {
-                        titulo: true
-                    }
+                    select: { titulo: true }
                 }
             }
         });
-        return result;
     }
-}
-exports.deletarEmprestimo = async (id) => {
-    await prisma.emprestimos.delete({
-        where: {
-            id 
+
+    return await prisma.emprestimos.findMany({
+        include: {
+            livros: {
+                select: { titulo: true }
+            }
         }
     });
 }
+
+exports.deletarEmprestimo = async (id) => {
+    await prisma.emprestimos.delete({
+        where: { id }
+    });
+};
+
 exports.atualizarEmprestimo = async (id, id_usuario, id_livro, data_emprestimo, data_devolucao, status) => {
-    const result = await prisma.emprestimos.update({
-        where: {
-            id 
-        },
+    return await prisma.emprestimos.update({
+        where: { id },
         data: {
             id_usuario,
             id_livro,
@@ -56,37 +73,48 @@ exports.atualizarEmprestimo = async (id, id_usuario, id_livro, data_emprestimo, 
             status
         }
     });
-    return result;
+};
 
-}
-exports.buscarEmprestimoPorId = async (tx, id) => {
-    const result = await tx.emprestimos.findUnique({
-        where: {
-            id
-        }
+exports.buscarEmprestimoPorId = async (txOrId, maybeId) => {
+    const tx = typeof maybeId === 'undefined' ? prisma : txOrId;
+    const id = typeof maybeId === 'undefined' ? txOrId : maybeId;
+
+    return await tx.emprestimos.findUnique({
+        where: { id }
     });
-    return result;
-}
+};
 
 exports.devolverEmprestimo = async (id) => {
-    const emprestimo = await prisma.emprestimos.update({
-        where: {
-            id
-        },
+    return await prisma.emprestimos.update({
+        where: { id },
         data: {
             data_devolucao: new Date()
         }
     });
-    return emprestimo;
-}
+};
 
-exports.atualizarStatusEmprestimo = async (tx ,id, status) => {
-    const emprestimo = await tx.emprestimos.update({
-        where: {
-            id
-        },
+exports.atualizarStatusEmprestimo = async (txOrId, maybeId, maybeStatus) => {
+    const tx = typeof maybeStatus === 'undefined' ? prisma : txOrId;
+    const id = typeof maybeStatus === 'undefined' ? txOrId : maybeId;
+    const status = typeof maybeStatus === 'undefined' ? maybeId : maybeStatus;
+
+    return await tx.emprestimos.update({
+        where: { id },
         data: status
     });
-    return emprestimo;
+};
+
+exports.listarEmprestimoCliente = async (user) => {
+    return await prisma.emprestimos.findMany({
+        where: {
+            id_usuario: Number(user.id)
+        },
+        include: {
+            livros: {
+                select: {
+                    titulo: true
+                }
+            }
+        }
+    });
 }
-    

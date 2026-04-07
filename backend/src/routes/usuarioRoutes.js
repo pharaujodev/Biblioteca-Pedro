@@ -5,7 +5,7 @@ const auth = require('../middlewares/auth');
 const autorizacao = require('../middlewares/autorizacao');
 
 router.post('/', controller.criarUsuario);
-router.get('/', autorizacao(['admin']), auth, controller.listarUsuario);
+router.get('/', auth, autorizacao(['admin']), controller.listarUsuario);
 router.delete('/:id', auth, autorizacao(['admin']), controller.deletarUsuario);
 router.put('/:id', auth, autorizacao(['admin']), controller.atualizarUsuario);
 router.get('/:id', auth, autorizacao(['admin']), controller.buscarUsuarioPorId);

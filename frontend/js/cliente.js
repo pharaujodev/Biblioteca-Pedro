@@ -199,6 +199,11 @@ async function carregarLivros() {
         const livros = await response.json();
 
         if (!response.ok) {
+            const mensagem = obterMensagemErro(livros, '').toLowerCase();
+            if (mensagem.includes('nenhum')) {
+                preencherEstadoVazio(document.querySelector('#tabela tbody'), 10, 'Nenhum livro encontrado.');
+                return;
+            }
             mostrarFeedback('danger', obterMensagemErro(livros, 'Não foi possível carregar os livros.'));
             return;
         }
@@ -221,13 +226,18 @@ async function carregarEmprestimosCliente() {
     try {
         mostrarLoading();
 
-        const response = await fetch(`${API_URL}/api/emprestimos`, {
+        const response = await fetch(`${API_URL}/api/emprestimos/cliente`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
         const emprestimos = await response.json();
 
         if (!response.ok) {
+            const mensagem = obterMensagemErro(emprestimos, '').toLowerCase();
+            if (mensagem.includes('nenhum')) {
+                preencherEstadoVazio(document.querySelector('#MeusEmprestimos tbody'), 3, 'Você ainda não possui empréstimos.');
+                return;
+            }
             mostrarFeedback('danger', obterMensagemErro(emprestimos, 'Não foi possível carregar seus empréstimos.'));
             return;
         }
@@ -303,6 +313,11 @@ async function carregarSolicitacaoEmprestimo() {
         const solicitacoes = await response.json();
 
         if (!response.ok) {
+            const mensagem = obterMensagemErro(solicitacoes, '').toLowerCase();
+            if (mensagem.includes('nenhum')) {
+                preencherEstadoVazio(document.querySelector('#solicitacao tbody'), 3, 'Você ainda não possui solicitações.');
+                return;
+            }
             mostrarFeedback('danger', obterMensagemErro(solicitacoes, 'Não foi possível carregar suas solicitações.'));
             return;
         }

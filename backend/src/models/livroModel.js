@@ -1,7 +1,7 @@
-const prisma = require ('../config/prisma');
+const prisma = require('../config/prisma');
 
 exports.criarLivro = async (titulo, autor, isbn, ano_publicacao, paginas, categoria, capa, disponivel, quantidade) => {
-    const result = await prisma.livros.create({
+    return await prisma.livros.create({
         data: {
             titulo,
             autor,
@@ -14,40 +14,33 @@ exports.criarLivro = async (titulo, autor, isbn, ano_publicacao, paginas, catego
             quantidade
         }
     });
-    return result;
-}
+};
 
 exports.listarLivros = async (search) => {
     if (search) {
-        const result = await prisma.livros.findMany({
+        return await prisma.livros.findMany({
             where: {
                 OR: [
                     { titulo: { contains: search, mode: 'insensitive' } },
                     { autor: { contains: search, mode: 'insensitive' } },
-                    { isbn: { contains: search, mode: 'insensitive' } },
+                    { isbn: { contains: search, mode: 'insensitive' } }
                 ]
             }
         });
-        return result;
-    } else {
-        const result = await prisma.livros.findMany();
-        return result;
     }
+
+    return await prisma.livros.findMany();
 };
 
 exports.deletarLivro = async (id) => {
     await prisma.livros.delete({
-        where: {
-            id
-        }
+        where: { id }
     });
-}
+};
 
 exports.atualizarLivro = async (id, titulo, autor, isbn, ano_publicacao, paginas, categoria, capa, disponivel, quantidade) => {
-    const result = await prisma.livros.update({
-        where: {
-            id  
-        },
+    return await prisma.livros.update({
+        where: { id },
         data: {
             titulo,
             autor,
@@ -60,26 +53,24 @@ exports.atualizarLivro = async (id, titulo, autor, isbn, ano_publicacao, paginas
             quantidade
         }
     });
-    return result;
-}
+};
 
-exports.atualizarLivroQuantidade = async (tx, id, quantidade) => {
-    const result = await tx.livros.update({
-        where: {
-            id
-        },
+exports.atualizarLivroQuantidade = async (txOrId, maybeId, maybeQuantidade) => {
+    const tx = typeof maybeQuantidade === 'undefined' ? prisma : txOrId;
+    const id = typeof maybeQuantidade === 'undefined' ? txOrId : maybeId;
+    const quantidade = typeof maybeQuantidade === 'undefined' ? maybeId : maybeQuantidade;
+
+    return await tx.livros.update({
+        where: { id },
         data: quantidade
     });
-    return result;
-}
+};
 
-exports.buscarLivroPorId = async (tx, id) => {
-    const result = await tx.livros.findUnique({
-        where: {
-            id
-        }
+exports.buscarLivroPorId = async (txOrId, maybeId) => {
+    const tx = typeof maybeId === 'undefined' ? prisma : txOrId;
+    const id = typeof maybeId === 'undefined' ? txOrId : maybeId;
+
+    return await tx.livros.findUnique({
+        where: { id }
     });
-    return result;
-}
-
-
+};

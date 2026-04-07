@@ -1,22 +1,24 @@
+/**
+ * SRP - Single Responsibility Principle
+ * Este model é responsável apenas pelo acesso ao banco de dados.
+ */
+
 const prisma = require('../config/prisma');
-const bcrypt = require('bcryptjs');
 
 exports.criarUsuario = async (nome, email, senha, role = 'cliente') => {
-    const hashSenha = await bcrypt.hash(senha, 10);
-    const result = await prisma.usuarios.create({
+    return await prisma.usuarios.create({
         data: {
             nome,
             email,
-            senha: hashSenha,
+            senha,
             role
         }
     });
-    return result;
-}
+};
 
 exports.listarUsuario = async (search) => {
-    if(search){
-        const result = await prisma.usuarios.findMany({
+    if (search) {
+        return await prisma.usuarios.findMany({
             where: {
                 OR: [
                     { nome: { contains: search, mode: 'insensitive' } },
@@ -24,21 +26,16 @@ exports.listarUsuario = async (search) => {
                 ]
             }
         });
-        return result;
     }
-    else{
-        const result = await prisma.usuarios.findMany();
-        return result;
-    }
-}
+
+    return await prisma.usuarios.findMany();
+};
 
 exports.deletarUsuario = async (id) => {
     await prisma.usuarios.delete({
-        where: {
-            id
-        }
+        where: { id }
     });
-}
+};
 
 exports.atualizarUsuario = async (id, nome, email, senha, role = 'cliente') => {
     const data = {
@@ -48,33 +45,23 @@ exports.atualizarUsuario = async (id, nome, email, senha, role = 'cliente') => {
     };
 
     if (senha) {
-        data.senha = await bcrypt.hash(senha, 10);
+        data.senha = senha;
     }
 
-    const result = await prisma.usuarios.update({
-        where: {
-            id
-        },
+    return await prisma.usuarios.update({
+        where: { id },
         data
     });
+};
 
-    return result;
-}
 exports.buscarUsuarioPorId = async (id) => {
-    const result = await prisma.usuarios.findUnique({
-        where: {
-            id
-        }
+    return await prisma.usuarios.findUnique({
+        where: { id }
     });
-    return result;
-}
+};
 
 exports.buscarUsuarioPorEmail = async (email) => {
-    const result = await prisma.usuarios.findUnique({
-        where: {
-            email
-        }
+    return await prisma.usuarios.findUnique({
+        where: { email }
     });
-    return result;
-}
-
+};

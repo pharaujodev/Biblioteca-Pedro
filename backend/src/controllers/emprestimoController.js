@@ -80,3 +80,13 @@ exports.devolverEmprestimo = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.listarEmprestimoCliente = async (req, res, next) => {
+    try {
+        const user = req.user.id;
+        const emprestimos = await EmprestimoService.listarEmprestimoCliente(user);
+        res.status(200).json(emprestimos);
+    } catch (error) {
+        next(error);
+    }
+};
