@@ -61,7 +61,7 @@ exports.atualizarSolicitacaoEmprestimo = async (id, status) => {
         }
 
         if (status === 'rejeitado') {
-            await this.deletarSolicitacaoEmprestimo(tx, id);
+            await solicitacaoemprestimo.deletarSolicitacaoEmprestimo(tx, id);
             return {
                 message: 'Solicitação de empréstimo rejeitada e removida com sucesso'
             };
