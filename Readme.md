@@ -1,5 +1,14 @@
 ## Biblioteca 
 
+![Node.js](https://img.shields.io/badge/Node.js-18-green)
+![Express](https://img.shields.io/badge/Express.js-backend-black)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-database-blue)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748)
+![Docker](https://img.shields.io/badge/Docker-container-blue)
+![JWT](https://img.shields.io/badge/Auth-JWT-orange)
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![API](https://img.shields.io/badge/API-REST-blue)
+
 Sistema de gerenciamento de biblioteca desenvolvido com Node.js, Express e Prisma, seguindo arquitetura em camadas e boas práticas de engenharia de software.
 
 ## Como executar

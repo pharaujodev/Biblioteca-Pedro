@@ -210,8 +210,8 @@
                     <label for="disponivel" class="form-label">Disponibilidade *</label>
                     <select class="form-select" id="disponivel" required>
                         <option value="">Selecione</option>
-                        <option value="true">Disponível</option>
-                        <option value="false">Indisponível</option>
+                        <option value="disponível">Disponível</option>
+                        <option value="indisponível">Indisponível</option>
                     </select>
                     <div class="invalid-feedback">Selecione a disponibilidade.</div>
                 </div>
@@ -304,8 +304,8 @@
                     <label for="disponivelEditar" class="form-label">Disponibilidade *</label>
                     <select class="form-select" id="disponivelEditar" required>
                         <option value="">Selecione</option>
-                        <option value="true">Disponível</option>
-                        <option value="false">Indisponível</option>
+                        <option value="disponível">Disponível</option>
+                        <option value="indisponível">Indisponível</option>
                     </select>
                     <div class="invalid-feedback">Selecione a disponibilidade.</div>
                 </div>
@@ -545,6 +545,16 @@
                     <label for="dataDevolucaoEmprestimoEditar" class="form-label">Data de Devolução *</label>
                     <input type="date" class="form-control" id="dataDevolucaoEmprestimoEditar" required>
                     <div class="invalid-feedback">Informe a data de devolução.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="statusEmprestimoEditar" class="form-label">Status *</label>
+                    <select class="form-select" id="statusEmprestimoEditar" required>
+                        <option value="">Selecione</option>
+                        <option value="devolvido">Devolvido</option>
+                        <option value="ativo">Ativo</option>
+                    </select>
+                    <div class="invalid-feedback">Informe o status do empréstimo.</div>
                 </div>
 
                 <button id="editarEmprestimoBtn" type="submit" class="btn btn-warning mt-3">Editar Empréstimo</button>

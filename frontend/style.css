@@ -49,7 +49,7 @@ body {
 }
 
 .navbar {
-  background: linear-gradient(to right, #4b2e1e, #5c3925) !important;
+  background: linear-gradient(to right, #4b2e1e, #5c3925);
   border-bottom: 1px solid var(--bs-border-color);
   box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.12);
 }
@@ -57,13 +57,13 @@ body {
 .navbar .navbar-brand,
 .navbar .nav-link,
 .navbar .dropdown-toggle {
-  color: #f8f1e7 !important;
+  color: #f8f1e7;
   font-weight: 500;
 }
 
 .navbar .nav-link:hover,
 .navbar .dropdown-toggle:hover {
-  color: #f0d7b8 !important;
+  color: #f0d7b8;
 }
 
 .navbar .dropdown-menu {
@@ -180,7 +180,7 @@ main > section.conteudo-ativo {
 
 #feedbackArea.d-none,
 #loadingGlobal.d-none {
-  display: none !important;
+  display: none;
 }
 
 #loadingGlobal {

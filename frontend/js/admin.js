@@ -39,6 +39,10 @@ function criarBadgeStatus(status) {
         return `<span class="badge text-bg-secondary" aria-label="Status: ${valorOriginal}">${valorOriginal}</span>`;
     }
 
+    if(valor === 'ativo') {
+        return `<span class="badge text-bg-success" aria-label="Status: ${valorOriginal}">${valorOriginal}</span>`;
+    }
+
     return `<span class="badge text-bg-light text-dark" aria-label="Status: ${valorOriginal}">${valorOriginal}</span>`;
 }
 
@@ -872,6 +876,7 @@ if (editarEmprestimoBtn) {
         const id_livro = document.querySelector('#idLivroEmprestimoEditar').value;
         const data_emprestimo = document.querySelector('#dataEmprestimoEditar').value;
         const data_devolucao = document.querySelector('#dataDevolucaoEmprestimoEditar').value;
+        const status = document.querySelector('#statusEmprestimoEditar').value;
 
         try {
             setBotaoLoading(editarEmprestimoBtn, 'Salvando...');
@@ -879,7 +884,7 @@ if (editarEmprestimoBtn) {
 
             const response = await fetch(`${API_URL}/api/emprestimos/${id}`, {
                 method: 'PUT',
-                body: JSON.stringify({ id_usuario, id_livro, data_emprestimo, data_devolucao }),
+                body: JSON.stringify({ id_usuario, id_livro, data_emprestimo, data_devolucao, status }),
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
