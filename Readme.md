@@ -11,12 +11,14 @@
 
 Sistema de gerenciamento de biblioteca desenvolvido com Node.js, Express e Prisma, seguindo arquitetura em camadas e boas práticas de engenharia de software.
 
+API RESTful completa para gerenciamento de biblioteca com autenticação, controle de usuários e gerenciamento de empréstimos.
+
 ## Como executar
 
 1. Clone o repositório
 
 ```bash
-git clone <seu-repositorio>
+git clone https://github.com/pharaujodev/Biblioteca-Pedro.git
 cd biblioteca
 ```
 
@@ -32,78 +34,101 @@ cp .env.example .env
 docker-compose up --build
 ```
 
-A API estará disponível em: http://localhost:3000
+## Acesso à aplicação
+
+Após iniciar os containers:
+
+- Front-end: http://localhost:3000
+- API: http://localhost:3000/api
+
+## Execução do front-end
+
+O front-end está localizado na pasta `frontend/` e é servido estaticamente pelo backend através do Express.
+
+### Telas disponíveis
+
+- Login: http://localhost:3000/index.html
+- Cadastro: http://localhost:3000/cadastro.html
+- Área do administrador: http://localhost:3000/admin.html
+- Área do cliente: http://localhost:3000/usuario.html
+
+### Acesso Padrão
+
+Para facilitar os testes, o sistema possui um usuário administrador padrão:
+
+- Email: admin@email.com
+- Senha: admin123
 
 ## Tecnologias utilizadas
 
-Node.js
-Express
-PostgreSQL
-Prisma ORM
-Docker e Docker Compose
-JWT
-bcrypt
+- Node.js
+- Express
+- PostgreSQL
+- Prisma ORM
+- Docker e Docker Compose
+- JWT
+- bcrypt
 
 ## Arquitetura
 
 O sistema segue uma arquitetura em camadas para facilitar a manutenção e escalabilidade:
 
-Routes: Definição dos endpoints.
-Controllers: Recebem requisições HTTP e validam entradas.
-Services: Concentram a lógica de negócio.
-Models: Gerenciam o acesso ao banco de dados via Prisma.
-Middlewares: Processam autenticação, autorização e tratamento de erros.
+- Routes: Definição dos endpoints.
+- Controllers: Recebem requisições HTTP e validam entradas.
+- Services: Concentram a lógica de negócio.
+- Models: Gerenciam o acesso ao banco de dados via Prisma.
+- Middlewares: Processam autenticação, autorização e tratamento de erros.
 
 ## Design Patterns e Princípios
 
-Singleton: Instância única do Prisma Client.
-Factory Method: Padronização de respostas com a classe ApiResponse.
-SOLID: Aplicação de SRP (Single Responsibility Principle) e OCP (Open/Closed Principle).
+- Singleton: Instância única do Prisma Client.
+- Factory Method: Padronização de respostas com a classe ApiResponse.
+- SOLID: Aplicação de SRP (Single Responsibility Principle) e OCP (Open/Closed Principle).
 
 ## Modelo de Dados
 
 Entidades principais
 
-Usuários
-Livros
-Empréstimos
-Solicitações de Empréstimo
+- Usuários
+- Livros
+- Empréstimos
+- Solicitações de Empréstimo
 
 Relacionamentos
 
-Usuário -> Empréstimos (1:N)
-Livro -> Empréstimos (1:N)
-Usuário -> Solicitações (1:N)
-Livro -> Solicitações (1:N)
+- Usuário -> Empréstimos (1:N)
+- Livro -> Empréstimos (1:N)
+- Usuário -> Solicitações (1:N)
+- Livro -> Solicitações (1:N)
 
 ## Autenticação e Autorização
 
 O controle de acesso é realizado via tokens JWT. O sistema utiliza dois níveis de permissão (Roles):
 
-admin: Acesso total ao sistema.
-cliente: Acesso restrito às suas próprias informações e consultas.
+- admin: Acesso total ao sistema.
+- cliente: Acesso restrito às suas próprias informações e consultas.
 
 ## Endpoints principais
 
 Auth
-POST /api/auth/login
+- POST /api/auth/login
 
 Usuários
-GET /api/usuarios
-POST /api/usuarios
+- GET /api/usuarios
+- POST /api/usuarios
 
 Livros
-GET /api/livros
-POST /api/livros
+- GET /api/livros
+- POST /api/livros
 
 Empréstimos
-GET /api/emprestimos
-GET /api/emprestimos/cliente
-POST /api/emprestimos
+- GET /api/emprestimos
+- GET /api/emprestimos/cliente
+- POST /api/emprestimos
 
 Solicitações
-POST /api/solicitacoes
-GET /api/solicitacoes
+- POST /api/solicitacoes
+- GET /api/solicitacoes
 
 ## Tratamento de erros
 
