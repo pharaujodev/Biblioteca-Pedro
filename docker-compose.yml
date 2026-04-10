@@ -27,7 +27,6 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./backend:/app
       - ./frontend:/frontend
     command: sh -c "npx prisma generate && npm run dev"
     environment:
