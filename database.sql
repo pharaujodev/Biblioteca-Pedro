@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 );
 
 INSERT INTO usuarios (nome, email, senha, role) VALUES
-('Pedro Henrique de Araujo Pereira', 'phenriqueapereira@outlook.com', '$2b$10$ZkI8rVA0UiqXq5JmB7LNT.DyUePb/R8CgaQ/sF3HwOu3F6mvcK.IW', 'admin');
+('admin', 'admin@email.com', '$2b$10$gjGyY/mP2ArCO8.4zP8VAOP6maoXhSyAY/SIpnOdRjGIILZ7twItG', 'admin');
 
 CREATE TABLE IF NOT EXISTS livros (
     id SERIAL PRIMARY KEY,
